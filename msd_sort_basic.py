@@ -47,12 +47,27 @@ class MSDSortBasic:
         # Create auxiliary array for distribution
         aux = [None] * n
         
-        # STUDENT TODO: Implement key-indexed counting sort
         # 1. Count frequency of each character at position d
+        count = [0] * (self.R + 2)  # +2 for -1 (end of string) and 0-indexing
+        
+        for i in range(n):
+            # Add 1 to handle -1 (end of string) case
+            char_code = self._char_at(arr[i], d) + 1
+            count[char_code + 1] += 1
+        
         # 2. Compute cumulative counts to determine positions
+        for r in range(self.R + 1):
+            count[r + 1] += count[r]
+        
         # 3. Distribute strings to auxiliary array
+        for i in range(n):
+            char_code = self._char_at(arr[i], d) + 1
+            aux[count[char_code]] = arr[i]
+            count[char_code] += 1
+        
         # 4. Copy back to original array
-        pass
+        for i in range(n):
+            arr[i] = aux[i]
     
     def is_sorted_by_position(self, arr: List[str], d: int) -> bool:
         """
